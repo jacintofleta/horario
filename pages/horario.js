@@ -4,6 +4,7 @@ import { connectToDatabase } from "../util/mongodb";
 import { useState, useEffect } from "react";
 
 import HeaderWorker from "../components/HeaderWorker";
+import HeaderCompany from "../components/HeaderCompany";
 
 import clientAxios from "../config/axios";
 import dayjs from "dayjs";
@@ -32,7 +33,6 @@ dayjs.updateLocale("en", {
 });
 
 import OnboardingCode from "../components/OnboardingCode";
-import jokes from "../util/jokes";
 
 import { FingerPrintIcon } from "@heroicons/react/solid";
 
@@ -78,7 +78,7 @@ export default function Horario({ user, jobs }) {
   return (
     <>
       <div className="relative bg-gray-50 overflow-hidden min-h-screen">
-        <HeaderWorker />
+        {user.company ? <HeaderCompany page="horario" /> : <HeaderWorker />}
         <div className=" text-center mx-auto mt-36 max-w-lg">
           {loading ? (
             <button

@@ -78,7 +78,7 @@ export default async function newcompany(req, res) {
   await db.collection("users").updateOne(
     { email: session.user.email },
     {
-      $set: { code },
+      $set: { code, company: true },
     }
   );
 
