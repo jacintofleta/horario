@@ -47,7 +47,7 @@ export default function Empresa({ user, jobs, employees }) {
             <div className="flex-1 min-w-0">
               <h2 className="text-sm text-center  leading-7 text-gray-600 sm:text-base  sm:truncate">
                 Solicita a tus empleados que se unan a Horario.io con el código
-                de empresa {user.code}
+                de empresa: {user.code}
               </h2>
             </div>
           </div>
