@@ -18,9 +18,24 @@ export default async function newjob(req, res) {
 
   const { db } = await connectToDatabase();
 
-  const newJob = await db
-    .collection("jobs")
-    .insertOne({ email: session.user.email, date: new Date(), mode });
+  let user;
+  try {
+    user = await db.collection("users").findOne({ email: session.user.email });
+    if (!user || !user.code) {
+      return res
+        .status(403)
+        .json({ message: "User not found or doesnt have a company code" });
+    }
+  } catch (error) {
+    return res.status(403).json({ message: "User not found" });
+  }
+
+  const newJob = await db.collection("jobs").insertOne({
+    email: session.user.email,
+    date: new Date(),
+    mode,
+    code: user.code,
+  });
 
   res.status(200).json({ newJob });
 }

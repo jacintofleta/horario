@@ -8,8 +8,6 @@ import Link from "next/link";
 export default function HeaderWorker({ page }) {
   const [session, loading] = useSession();
 
-  console.log(page);
-
   return (
     <Disclosure as="nav" className="bg-white shadow">
       {({ open }) => (

@@ -2,6 +2,8 @@ import { signIn, signOut, useSession } from "next-auth/client";
 import { getCsrfToken } from "next-auth/client";
 import Link from "next/link";
 
+import { LogoutIcon } from "@heroicons/react/outline";
+
 export default function Home({ csrfToken }) {
   const [session, loading] = useSession();
 
@@ -112,11 +114,12 @@ export default function Home({ csrfToken }) {
                         id="hero-email"
                         type="email"
                         name="email"
-                        className="block w-full border border-gray-300 rounded-md px-5 py-3 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-rose-500 focus:ring-rose-500"
+                        disabled="disabled"
+                        className="block w-full border border-gray-300 rounded-md px-5 py-3 text-base text-gray-900 placeholder-gray-500 shadow-sm bg-gray-200 focus:border-rose-500 focus:ring-rose-500"
                         placeholder={session.user.email}
                       />
                     </div>
-                    <div className="mt-4 sm:mt-0 sm:ml-3">
+                    <div className="mt-4 sm:mt-0 sm:ml-3 mx-auto">
                       <Link href="/horario" passHref>
                         <button
                           type="text"
@@ -143,6 +146,7 @@ export default function Home({ csrfToken }) {
                         id="hero-email"
                         type="email"
                         name="email"
+                        required
                         className="block w-full border border-gray-300 rounded-md px-5 py-3 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-rose-500 focus:ring-rose-500"
                         placeholder="Enter your email"
                       />
@@ -159,6 +163,18 @@ export default function Home({ csrfToken }) {
                 )}
               </form>
             </div>
+
+            {session ? (
+              <div className="mt-10 mx-auto">
+                <button
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="flex-row inline-flex p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none "
+                >
+                  Cerrar sesión
+                  <LogoutIcon className="h-6 w-6 ml-4" aria-hidden="true" />
+                </button>
+              </div>
+            ) : null}
           </div>
         </main>
       </div>

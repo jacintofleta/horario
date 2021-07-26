@@ -1,13 +1,13 @@
-import { signIn, signOut, getSession } from "next-auth/client";
+import { getSession } from "next-auth/client";
 import { connectToDatabase } from "../util/mongodb";
 
-import HeaderWorker from "../components/HeaderWorker";
 import HeaderCompany from "../components/HeaderCompany";
 
-import clientAxios from "../config/axios";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
+
+import CompanyEmployees from "../components/CompanyEmployees";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
@@ -32,9 +32,7 @@ dayjs.updateLocale("en", {
 
 import OnboardingCode from "../components/OnboardingCode";
 
-import { FingerPrintIcon } from "@heroicons/react/solid";
-
-export default function Empresa({ user, jobs }) {
+export default function Empresa({ user, jobs, employees }) {
   if (!user.code) {
     return <OnboardingCode />;
   }
@@ -42,8 +40,18 @@ export default function Empresa({ user, jobs }) {
   return (
     <>
       <div className="relative bg-gray-50 overflow-hidden min-h-screen">
-        {user.company ? <HeaderCompany page="empresa" /> : <HeaderWorker />}
-        <div className=" text-center mx-auto mt-36 max-w-lg">hola</div>
+        <HeaderCompany page="empresa" />
+        <div className=" mx-auto mt-10 max-w-5xl">
+          <CompanyEmployees employees={employees} jobs={jobs} />
+          <div className="flex items-center justify-between space-x-6 mx-4 lg:mx-0 mt-8">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-sm text-center  leading-7 text-gray-600 sm:text-base  sm:truncate">
+                Solicita a tus empleados que se unan a Horario.io con el código
+                de empresa {user.code}
+              </h2>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -70,14 +78,20 @@ export async function getServerSideProps(context) {
 
   const jobs = await db
     .collection("jobs")
-    .find({ email: session.user.email })
+    .find({ code: user.code })
     .sort({ date: 1 })
+    .toArray();
+
+  const employees = await db
+    .collection("users")
+    .find({ code: user.code })
     .toArray();
 
   return {
     props: {
       user: JSON.parse(JSON.stringify(user)),
       jobs: JSON.parse(JSON.stringify(jobs)),
+      employees: JSON.parse(JSON.stringify(employees)),
     },
   };
 }

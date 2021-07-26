@@ -11,6 +11,7 @@ const OnboardingCode = () => {
   let newCompany = async () => {
     try {
       let response = await clientAxios.post("api/newcompany");
+      router.push("/empresa");
     } catch (error) {
       console.log(error);
     }
