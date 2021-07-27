@@ -8,11 +8,15 @@ const OnboardingCode = () => {
   const [code, setCode] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [isLoadingCompany, setIsLoadingCompany] = useState(false);
+
   let newCompany = async () => {
+    setIsLoadingCompany(true);
     try {
       let response = await clientAxios.post("api/newcompany");
       router.push("/empresa");
     } catch (error) {
+      setIsLoadingCompany(false);
       console.log(error);
     }
   };
@@ -75,13 +79,23 @@ const OnboardingCode = () => {
         </div>
       </div>
       <div className="max-w-lg mx-auto text-center">
-        <button
-          onClick={() => newCompany()}
-          type="button"
-          className="mt-12 border border-transparent text-xs font-medium text-indigo-700"
-        >
-          O crea una nueva empresa
-        </button>
+        {isLoadingCompany ? (
+          <button
+            disabled
+            type="button"
+            className="mt-12 animate-pulse border border-transparent text-xs font-medium text-indigo-700"
+          >
+            Cargando
+          </button>
+        ) : (
+          <button
+            onClick={() => newCompany()}
+            type="button"
+            className="mt-12 border border-transparent text-xs font-medium text-indigo-700"
+          >
+            O crea una nueva empresa
+          </button>
+        )}
       </div>
     </div>
   );
