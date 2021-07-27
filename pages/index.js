@@ -3,9 +3,11 @@ import { getCsrfToken } from "next-auth/client";
 import Link from "next/link";
 
 import { LogoutIcon } from "@heroicons/react/outline";
+import { useState } from "react";
 
 export default function Home({ csrfToken }) {
   const [session, loading] = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <div className="relative bg-gray-50 overflow-hidden min-h-screen">
@@ -97,6 +99,7 @@ export default function Home({ csrfToken }) {
                 method="post"
                 action="/api/auth/signin/email"
                 className="mt-8 max-w-lg w-full sm:flex"
+                onSubmit={() => setIsLoading(true)}
               >
                 {session ? (
                   <>
@@ -120,14 +123,25 @@ export default function Home({ csrfToken }) {
                       />
                     </div>
                     <div className="mt-4 sm:mt-0 sm:ml-3 mx-auto">
-                      <Link href="/horario" passHref>
+                      {isLoading ? (
                         <button
                           type="text"
-                          className="bg-indigo-600 block w-full rounded-md border border-transparent px-5 py-3 bg-rose-500 text-base font-medium text-white shadow hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 sm:px-10"
+                          disabled
+                          className="bg-indigo-400 block w-full rounded-md border border-transparent px-5 py-3 bg-rose-500 text-base font-medium text-white shadow hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 sm:px-10"
                         >
-                          Entrar
+                          Loading
                         </button>
-                      </Link>
+                      ) : (
+                        <Link href="/horario" passHref>
+                          <button
+                            onClick={() => setIsLoading(true)}
+                            type="text"
+                            className="bg-indigo-600 block w-full rounded-md border border-transparent px-5 py-3 bg-rose-500 text-base font-medium text-white shadow hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 sm:px-10"
+                          >
+                            Entrar
+                          </button>
+                        </Link>
+                      )}
                     </div>
                   </>
                 ) : (
@@ -152,12 +166,22 @@ export default function Home({ csrfToken }) {
                       />
                     </div>
                     <div className="mt-4 sm:mt-0 sm:ml-3">
-                      <button
-                        type="submit"
-                        className="bg-indigo-600 block w-full rounded-md border border-transparent px-5 py-3 bg-rose-500 text-base font-medium text-white shadow hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 sm:px-10"
-                      >
-                        Entrar
-                      </button>
+                      {isLoading ? (
+                        <button
+                          disabled
+                          type="button"
+                          className="bg-indigo-400 block w-full rounded-md border border-transparent px-5 py-3 bg-rose-500 text-base font-medium text-white shadow hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 sm:px-10"
+                        >
+                          Loading
+                        </button>
+                      ) : (
+                        <button
+                          type="submit"
+                          className="bg-indigo-600 block w-full rounded-md border border-transparent px-5 py-3 bg-rose-500 text-base font-medium text-white shadow hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 sm:px-10"
+                        >
+                          Entrar
+                        </button>
+                      )}
                     </div>
                   </>
                 )}
