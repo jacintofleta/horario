@@ -2,9 +2,10 @@ import "tailwindcss/tailwind.css";
 import { Provider } from "next-auth/client";
 import NProgress from "nprogress";
 
-import Head from "next/head";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+
+import "../public/nprogress.css";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -28,10 +29,6 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      <Head>
-        {/* Import CSS for nprogress */}
-        <link rel="stylesheet" href="/nprogress.css" />
-      </Head>
       <Provider session={pageProps.session}>
         <Component {...pageProps} />
       </Provider>

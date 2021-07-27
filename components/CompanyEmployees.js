@@ -34,7 +34,7 @@ export default function CompanyEmployees({ employees, jobs }) {
     );
 
     setJobsPerDate(newJobsPerDate);
-  }, [dateRange]);
+  }, [dateRange, jobs]);
 
   const [openModal, setOpenModal] = useState(false);
 
