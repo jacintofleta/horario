@@ -75,7 +75,6 @@ export default function CompanyEmployees({ employees, jobs }) {
     let time = 0;
 
     for (let i = 0; i < employeeJobs.length; i += 2) {
-      console.log(employeeJobs[i + 1].date);
       const date1 = dayjs(employeeJobs[i + 1].date);
       const date2 = dayjs(employeeJobs[i].date);
       time += date1.diff(date2);
@@ -88,7 +87,7 @@ export default function CompanyEmployees({ employees, jobs }) {
     let employeeJobs = jobsPerDate.filter((job) => job.email === employeeEmail);
 
     if (employeeJobs.length === 0) {
-      return 0;
+      return false;
     }
 
     //If employee started the dateRange.startDate working
@@ -205,6 +204,7 @@ export default function CompanyEmployees({ employees, jobs }) {
                   {employees.map((person, personIdx) => {
                     let time = getNumberOfHours(person.email);
                     let jobsDataCsv = getDataToCSV(person.email);
+
                     return (
                       <tr
                         key={person.email}
@@ -219,20 +219,17 @@ export default function CompanyEmployees({ employees, jobs }) {
                           {time}h
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <a
-                            href="#"
-                            className="text-indigo-600 hover:text-indigo-900"
-                          >
+                          {jobsDataCsv ? (
                             <CSVLink
                               data={jobsDataCsv.data}
                               headers={jobsDataCsv.headers}
                               filename={`${person.email}.csv`}
-                              className="btn btn-primary"
+                              className="btn btn-primary text-indigo-600 hover:text-indigo-900"
                               target="_blank"
                             >
                               <DocumentDownloadIcon className="h-6" />
                             </CSVLink>
-                          </a>
+                          ) : null}
                         </td>
                       </tr>
                     );
